@@ -63,9 +63,9 @@ public with sharing class RecordWatcherController {
     public static void removeRecordWatcherOrgCache(Id recordId, String objectApiName, String userId, String keyParam){
         String key = null;
         Map<String, Object> recordWatcherMap = new Map<String, Object>();
-        if(keyParam!=null && userId!=null && recordId==null && recordId.getSObjectType().getDescribe().getName()==null){
+        if(keyParam!=null && userId!=null && recordId==null){
             key = keyParam;
-            recordWatcherMap = getRecordWatcher(recordId, recordId.getSObjectType().getDescribe().getName(), key);
+            recordWatcherMap = getRecordWatcher(null, null, key);
         }else{
             String formattedObjApiName = recordId.getSObjectType().getDescribe().getName().replace('_','');
             key = 'RW'+formattedObjApiName+recordId;
