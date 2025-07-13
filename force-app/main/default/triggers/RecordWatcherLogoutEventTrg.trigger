@@ -8,17 +8,16 @@ trigger RecordWatcherLogoutEventTrg on LogoutEventStream (after insert) {
         loggedOutUserIds.add(les.UserId);
     }
     
-    String keys = '';
-    
     if(!loggedOutUserIds.isEmpty()){
         Set<String> cacheKeys = Cache.Org.getKeys();
         List<String> cacheKeysToRemove = new List<String>();
         for(String key: cacheKeys){
             Object cacheObj = Cache.Org.get(key);
-            List<Id> userIds = (List<Id>)(JSON.deserialize(JSON.serialize(cacheObj),RecordWatcherController.RecordWatcher.class));
-            if(userIds!=null && !userIds.isEmpty()){
-                if(userIds.contains(loggedOutUserIds[0])){
-                    keys+=key+', ';
+            Map<String, Object> recordWatcherObj = (Map<String, Object>)(JSON.deserializeUntyped(JSON.serialize(cacheObj)));
+            Map<String, Object> userActivityMap = (Map<String, Object>)(JSON.deserializeUntyped(JSON.serialize(recordWatcherObj.get('userIdActivityMap'))));
+            System.debug('WorkerIds=>'+userActivityMap.keySet());
+            if(userActivityMap!=null && !userActivityMap.isEmpty()){
+                if(userActivityMap.containsKey(loggedOutUserIds[0])){
                     RecordWatcherController.removeRecordWatcherOrgCache(null,null,loggedOutUserIds[0], key);
                 }
             }
