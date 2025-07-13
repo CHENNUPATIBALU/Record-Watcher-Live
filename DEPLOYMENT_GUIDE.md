@@ -407,9 +407,6 @@ for (String key : cacheKeys) {
         Cache.Org.remove(key);
     }
 }
-
-// Clean up platform events (if needed)
-DELETE FROM Record_Watcher__e WHERE CreatedDate < TODAY
 ```
 
 ---
