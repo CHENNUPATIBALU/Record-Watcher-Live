@@ -63,7 +63,7 @@ public with sharing class RecordWatcherController {
     public static void removeRecordWatcherOrgCache(Id recordId, String objectApiName, String userId, String keyParam){
         String key = null;
         Map<String, Object> recordWatcherMap = new Map<String, Object>();
-        if(keyParam!=null && userId!=null && recordId==null){
+        if(keyParam!=null && userId!=null && recordId==null && objectApiName==null){
             key = keyParam;
             recordWatcherMap = getRecordWatcher(null, null, key);
         }else{
@@ -190,6 +190,9 @@ public with sharing class RecordWatcherController {
      */
     @InvocableMethod(label='Get Current Record Watchers')
     public static List<List<RecordWatcherOutput>> getCurrentRecordWatchers(List<RecordWatcherInput> rwInput){
+        if (rwInput == null || rwInput.isEmpty()) {
+            return null;
+        }
         List<RecordWatcherOutput> rwoList = new List<RecordWatcherOutput>();
         List<List<RecordWatcherOutput>> rwoLst = new List<List<RecordWatcherOutput>>();
         String recordId = rwInput[0].recordId;
@@ -199,26 +202,28 @@ public with sharing class RecordWatcherController {
         List<User> recordWatchers = new List<User>();
         
         if(recordWatchersMap!=null && !recordWatchersMap.isEmpty()){
-            List<Object> userIds = (List<Object>)JSON.deserializeUntyped(JSON.serialize(recordWatchersMap.get('userIds')));
-            List<Id> userIdsList = new List<id>();
-            for(Object obj: userIds){
-                userIdsList.add(String.valueOf(obj));
+            Object userIdsObj = recordWatchersMap.get('userIds');
+            if (userIdsObj != null) {
+                List<Object> userIds = (List<Object>)JSON.deserializeUntyped(JSON.serialize(userIdsObj));
+                List<Id> userIdsList = new List<id>();
+                for(Object obj: userIds){
+                    userIdsList.add(String.valueOf(obj));
+                }
+                recordWatchers = fetchUser(userIdsList);
+                for(User u: recordWatchers){
+                    RecordWatcherOutput rwo = new RecordWatcherOutput();
+                    rwo.WatcherName = u.Name;
+                    rwo.WatcherId = u.Id;
+                    rwo.WatcherRole = u.UserRole.Name;
+                    rwo.WatcherPhotoUrl = u.SmallPhotoUrl;
+                    rwoList.add(rwo);
+                }
+                rwoLst.add(rwoList);
+                return rwoLst;
+            } else {
+                return null;
             }
-            recordWatchers = fetchUser(userIdsList);
-            
-            for(User u: recordWatchers){
-                RecordWatcherOutput rwo = new RecordWatcherOutput();
-                rwo.WatcherName = u.Name;
-                rwo.WatcherId = u.Id;
-                rwo.WatcherRole = u.UserRole.Name;
-                rwo.WatcherPhotoUrl = u.SmallPhotoUrl;
-                rwoList.add(rwo);
-            }
-            rwoLst.add(rwoList);
-            
-            return rwoLst;
         }
-        
         return null;
     }
     
@@ -234,7 +239,7 @@ public with sharing class RecordWatcherController {
         Map<String, Object> recordWatcherMap = getRecordWatcher(recordId, objectApiName, null);
         if (recordWatcherMap != null && recordWatcherMap.containsKey('userIdActivityMap')) {
             Map<String, Object> userActivityMap = (Map<String, Object>)(JSON.deserializeUntyped(JSON.serialize(recordWatcherMap.get('userIdActivityMap'))));
-            if(userActivityMap.containsKey(userId)){
+            if(userActivityMap.containsKey(userId)){    
                 return true;
             }
         }
@@ -275,13 +280,11 @@ public with sharing class RecordWatcherController {
                     Map<String, Object> cacheMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(cacheObj));
                     
                     // Create user activity map from the stored list
-                    List<Object> userIdsObj = (List<Object>)cacheMap.get('userIds');
                     Map<String, Boolean> userActivityMap = new Map<String, Boolean>();
-                    
-                    if(userIdsObj != null) {
-                        for(Object obj: userIdsObj){
-                            String userId = String.valueOf(obj);
-                            userActivityMap.put(userId, true); // All stored users are considered active
+                    Map<String, Object> userIdActivityMap = (Map<String, Object>)cacheMap.get('userIdActivityMap');
+                    if(userIdActivityMap != null) {
+                        for(String userId : userIdActivityMap.keySet()){
+                            userActivityMap.put(userId, Boolean.valueOf(userIdActivityMap.get(userId)));
                         }
                     }
                     
@@ -311,13 +314,12 @@ public with sharing class RecordWatcherController {
         Map<String, Object> recordWatcherMap = getRecordWatcher(recordId, objectApiName, null);
         Map<Id, Boolean> userActivityMap = new Map<Id, Boolean>();
         
-        if(recordWatcherMap != null && recordWatcherMap.containsKey('userIds')) {
-            List<Object> userIdsObj = (List<Object>)JSON.deserializeUntyped(JSON.serialize(recordWatcherMap.get('userIds')));
+        if(recordWatcherMap != null && recordWatcherMap.containsKey('userIdActivityMap')) {
+            Map<String, Object> userIdActivityMap = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(recordWatcherMap.get('userIdActivityMap')));
             
             // Convert existing list to map
-            for(Object obj: userIdsObj){
-                String existingUserId = String.valueOf(obj);
-                userActivityMap.put(existingUserId, true);
+            for(String existingUserId : userIdActivityMap.keySet()){
+                userActivityMap.put(existingUserId, Boolean.valueOf(userIdActivityMap.get(existingUserId)));
             }
         }
         
