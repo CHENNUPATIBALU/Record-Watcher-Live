@@ -11,8 +11,7 @@
 8. [Installation & Deployment](#installation--deployment)
 9. [Usage Guide](#usage-guide)
 10. [API Reference](#api-reference)
-11. [Testing](#testing)
-12. [Troubleshooting](#troubleshooting)
+11. [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -93,9 +92,6 @@ Main component that handles record watching functionality.
 - `onTabFocused()` - Handles tab focus events
 - `onTabClosed()` - Handles tab close events
 
-#### showToast.cmp
-Utility component for displaying toast notifications.
-
 ### Lightning Web Components
 
 #### recordWatcherLWC
@@ -115,15 +111,6 @@ Modern LWC version of the record watcher functionality.
 
 #### recordWatchersModal
 Modal component for displaying current record watchers.
-
-#### recordWatcherObjectsList
-Component for listing available objects.
-
-#### recordWatchersAgentForce
-Agent-specific component for Service Console.
-
-#### recordWatcherTab
-Tab component for displaying watcher information.
 
 ## Apex Classes
 
@@ -219,14 +206,6 @@ Processes platform events after insert.
 - Manages user activity maps
 - Handles multiple users watching same record
 
-### CaseRecordWatcherTrigger
-**Status**: Disabled (commented out)
-
-**Object**: Case  
-**Timing**: After Update
-
-**Note**: This trigger is currently disabled and contains commented-out code for Ticket_Worker__e events.
-
 ### RecordWatcherLogoutEventTrg
 Handles user logout events.
 
@@ -235,7 +214,6 @@ Handles user logout events.
 
 **Functionality**:
 - Removes logged-out users from cache
-- Sends email notifications
 - Cleans up user activity
 
 ## Configuration
@@ -362,32 +340,6 @@ Cache keys follow the pattern: `RW{ObjectName}{RecordId}`
 **Examples**:
 - `RWAccount001XXXXXXXXXXXXXXX`
 - `RWContact003XXXXXXXXXXXXXXX`
-
-## Testing
-
-### Test Classes
-
-#### RecordWatcherControllerTest
-Comprehensive tests for main controller functionality.
-
-**Test Methods**:
-- `testUpdateRecordWatcher()` - Tests event publishing
-- `testIsUserInRecordWatcherCache()` - Tests cache checking
-- `testGetRecordWatcher()` - Tests cache retrieval
-- `testEventBusPublish()` - Tests platform event publishing
-
-#### RecordWatcherEventTriggerTest
-Tests for trigger functionality.
-
-**Test Methods**:
-- `testTriggerWithNewWatcher()` - New user watching
-- `testTriggerWithExistingCache()` - Existing cache scenario
-- `testTriggerWithMultipleEvents()` - Multiple events
-- `testTriggerWithNullValues()` - Error handling
-
-### Running Tests
-```bash
-sfdx force:apex:test:run -n RecordWatcherControllerTest,RecordWatcherEventTriggerTest
 ```
 
 ## Troubleshooting
