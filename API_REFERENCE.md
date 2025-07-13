@@ -403,40 +403,7 @@ Main Aura component for record watching.
 - `onTabFocused()` - Handles tab focus events
 - `onTabClosed()` - Handles tab close events
 
-#### showToast.cmp
-
-Utility component for displaying toast notifications.
-
-**Methods**:
-- `showToast(type, message)` - Displays toast notification
-
 ### Lightning Web Components
-
-#### recordWatcherLWC
-
-Modern LWC version of record watcher functionality.
-
-**Targets**: `lightning__RecordPage`
-
-**Properties**:
-- `@api recordId` - Current record ID
-- `@api sObjectName` - Object API name
-
-**Tracked Properties**:
-- `workers` - List of current watchers
-- `isWorking` - Whether component is active
-- `currentUserId` - Current user ID
-- `updateRecId` - Current record ID
-
-**Methods**:
-- `connectedCallback()` - Component initialization
-- `disconnectedCallback()` - Component cleanup
-- `subscribe()` - Subscribe to platform events
-- `unsubscribe()` - Unsubscribe from platform events
-- `getAllTabInfo()` - Get tab information
-- `updateRecordRelatedToTab()` - Update record watching
-- `refresh()` - Refresh component data
-- `handleTabClosed()` - Handle tab close
 
 #### recordWatchersModal
 
@@ -449,25 +416,6 @@ Modal component for displaying current record watchers.
 **Methods**:
 - `handleClose()` - Close modal
 - `handleOpenUser()` - Open user record
-
-#### recordWatcherObjectsList
-
-Component for listing available objects.
-
-**Properties**:
-- `objects` - List of available objects
-
-#### recordWatchersAgentForce
-
-Agent-specific component for Service Console.
-
-**Targets**: `lightning__AppPage`, `lightning__Home`
-
-#### recordWatcherTab
-
-Tab component for displaying watcher information.
-
-**Targets**: `lightning__Tab`
 
 ## Triggers
 
