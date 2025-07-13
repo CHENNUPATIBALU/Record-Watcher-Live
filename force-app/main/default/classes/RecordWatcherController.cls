@@ -121,7 +121,7 @@ public with sharing class RecordWatcherController {
     @AuraEnabled
     public static Map<String, Object> getRecordWatcher(Id recId, String objApiName, String keyParam){
         String key = null;
-        if(keyParam!=null){
+        if(keyParam!=null && recId==null && objApiName==null){
             key = keyParam;
         }else{
             String formattedObjApiName = recId.getSObjectType().getDescribe().getName().replace('_','');
