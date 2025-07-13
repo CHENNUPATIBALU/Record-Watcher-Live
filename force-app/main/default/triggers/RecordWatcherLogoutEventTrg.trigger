@@ -23,32 +23,5 @@ trigger RecordWatcherLogoutEventTrg on LogoutEventStream (after insert) {
                 }
             }
         }
-        
-        OrgWideEmailAddress[] oweaList = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress WHERE Address = 'sdo@salesforce.com' LIMIT 1];
-        
-        if (!oweaList.isEmpty()) {
-         	// Create a new email object
-            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-            
-            // Set the recipient's email address
-            String[] toAddresses = new String[] {'bchennupati@salesforce.com'};
-                mail.setToAddresses(toAddresses);
-            
-            // Set the email contents
-            mail.setSubject('Record Watcher Logout Event');
-            mail.setPlainTextBody(keys);
-            
-            mail.setOrgWideEmailAddressId(oweaList[0].Id);
-            
-            // Send the email
-            Messaging.SendEmailResult[] results = Messaging.sendEmail(new Messaging.Email[] {mail});
-            
-            // Check the result
-            if (results[0].isSuccess()) {
-                System.debug('Email sent successfully.');
-            } else {
-                System.debug('Failed to send email: ' + results[0].getErrors()[0].getMessage());
-            }   
-        }
     }
 }
