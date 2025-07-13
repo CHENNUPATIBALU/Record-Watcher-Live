@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text { font-family: Arial, sans-serif; font-weight: bold; fill: white; }
+  </style>
+  <rect x="10" y="40" rx="15" ry="15" width="200" height="160" fill="#1E73BE"/>
+  <text x="110" y="80" font-size="16" text-anchor="middle" class="text">Currently</text>
+  <text x="110" y="100" font-size="16" text-anchor="middle" class="text">Watching Users</text>
+
+  <!-- Eye Icon -->
+  <path d="M110 10C80 10 50 40 50 40C50 40 80 70 110 70C140 70 170 40 170 40C170 40 140 10 110 10Z" fill="#1E73BE"/>
+  <circle cx="110" cy="40" r="10" fill="white"/>
+
+  <!-- User Icons -->
+  <circle cx="65" cy="150" r="12" fill="white"/>
+  <rect x="53" y="160" width="24" height="20" rx="5" fill="white"/>
+
+  <circle cx="110" cy="150" r="12" fill="white"/>
+  <rect x="98" y="160" width="24" height="20" rx="5" fill="white"/>
+
+  <circle cx="155" cy="150" r="12" fill="white"/>
+  <rect x="143" y="160" width="24" height="20" rx="5" fill="white"/>
+</svg>

@@ -1,0 +1,72 @@
+<aura:component implements="force:hasRecordId,force:hasSObjectName,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome" access="global" controller="RecordWatcherController">
+    <aura:attribute name="openedTabs" type="List"></aura:attribute>
+    <aura:attribute name="currentUserId" type="String"></aura:attribute>
+    <aura:attribute name="currentUserName" type="String"></aura:attribute>
+    <aura:attribute name="updateRecId" type="String"></aura:attribute>
+    <aura:attribute name="currentTabId" type="String"></aura:attribute>
+    <aura:attribute name="setIntervalId" type="Integer"/>
+    <aura:attribute name="isWorking" type="Boolean"></aura:attribute>
+    <aura:attribute name="showSpinner" type="Boolean"></aura:attribute>
+    <aura:attribute name="workers" type="List"/>
+    <aura:attribute name="workersCount" type="Integer" default="0"/>
+    <aura:attribute name="oldWorkers" type="List"></aura:attribute>
+    <aura:attribute name="subscription" type="Map" />
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="showWatchersModal" type="Boolean" default="false"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="ErrorMsg" type="String"/>
+    <aura:attribute name="isTesting" type="Boolean" default="false"/>
+
+    <lightning:input aura:id="channel" class="slds-hide" label="channel" name="channel" type="text" value="/event/Record_Watcher__e"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="aura:locationChange" action="{!c.handleDestroy}"/>
+    <aura:handler event="lightning:tabClosed" action="{! c.onTabClosed }"/> 
+    <aura:handler event="lightning:tabRefreshed" action="{! c.onTabRefreshed }"/>
+    <aura:handler event="lightning:tabFocused" action="{! c.onTabFocused }"/>
+
+
+    <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:empApi aura:id="empApi" />
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading..."></lightning:spinner>
+    </aura:if>
+    <aura:if isTrue="{!v.isWorking}">
+        <lightning:card title="Also viewing" iconName="utility:people">
+            <div class="slds-m-around_medium slds-align_absolute-center">
+                <aura:iteration items="{!v.workers}" var="worker" indexVar="index">
+                    <aura:if isTrue="{!index &lt; 5}">
+                        <div class="{!worker.Id}" data-user-id="{!worker.Id}" onclick="{!c.openUserDetail}">
+                            <lightning:avatar
+                                style="{!worker.customCss}"
+                                variant="circle"
+                                src="{!worker.SmallPhotoUrl}"
+                                title="{!worker.Name}"
+                                fallbackIconName="standard:people"
+                                alternativeText="{!worker.Name}"
+                                class="slds-m-right_medium"/>
+                        </div>
+                        
+                    </aura:if>
+                </aura:iteration>
+                <aura:if isTrue="{!v.workers.length > 5}">
+                    <lightning:avatar onclick="{!c.showMoreWatchers}" style="cursor: pointer; opacity: 0.8; transition: opacity 0.3s ease;" variant="circle" initials="{!'+' + (v.workers.length - 5)}"
+                        title="{!'+' + (v.workers.length - 5)}" fallbackIconName="standard:people"
+                        alternativeText="{!'+' + (v.workers.length - 5)}" class="slds-m-right_medium" />
+                </aura:if>
+            </div>
+            <aura:if isTrue="{!v.showWatchersModal}">
+                <c:recordWatchersModal recordWatchers="{!v.workers}" onclose="{!c.hideMoreWatchers}" onopenuser="{!c.openUserDetail}"></c:recordWatchersModal>
+            </aura:if>
+        </lightning:card>
+    </aura:if>
+    <aura:if isTrue="{!v.hasError}">
+        <lightning:card title="Also here">
+            <div class="slds-m-around_medium">
+                <p>{!v.ErrorMsg}</p>
+            </div>
+        </lightning:card>
+    </aura:if>
+
+</aura:component>

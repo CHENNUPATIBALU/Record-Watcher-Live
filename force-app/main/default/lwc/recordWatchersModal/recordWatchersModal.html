@@ -1,0 +1,31 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+        class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close" onclick={handleClose}>
+                <lightning-icon icon-name="utility:close"></lightning-icon>
+            </button>
+            <!-- <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Modal header</h1>
+            </div> -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <template for:each={recordWatchers} for:item="rw">
+                    <div key={rw.Id} class="slds-box slds-theme_default slds-m-bottom_small">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-grid">
+                                    <div class="slds-col" onclick={handleOpenUser} data-user={rw.Id}>
+                                        <lightning-avatar style={rw.customCss} variant="circle" src={rw.SmallPhotoUrl} title={rw.Name} fallback-icon-name="standard:people" alternative-text={rw.Name} class="slds-m-right_medium"></lightning-avatar>
+                                        <span>{rw.Name}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </template>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+</template>
