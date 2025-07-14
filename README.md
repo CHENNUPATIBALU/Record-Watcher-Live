@@ -94,21 +94,6 @@ Main component that handles record watching functionality.
 
 ### Lightning Web Components
 
-#### recordWatcherLWC
-Modern LWC version of the record watcher functionality.
-
-**Targets**: `lightning__RecordPage`
-
-**Properties**:
-- `@api recordId` - Current record ID
-- `@api sObjectName` - Object API name
-
-**Key Features**:
-- Platform event subscription via EMP API
-- Message channel subscription for tab events
-- Real-time UI updates
-- Automatic cleanup
-
 #### recordWatchersModal
 Modal component for displaying current record watchers.
 
