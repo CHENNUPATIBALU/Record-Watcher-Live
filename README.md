@@ -1,5 +1,7 @@
 # RecordWatcher - Salesforce Platform Event Application
 
+<p align="left"> <img src="https://komarev.com/ghpvc/?username=RecordWatcher&label=Repository%20views&color=0e75b6&style=flat" alt="RecordWatcher" /> </p>
+
 ## Table of Contents
 1. [Overview](#overview)
 2. [Architecture](#architecture)
