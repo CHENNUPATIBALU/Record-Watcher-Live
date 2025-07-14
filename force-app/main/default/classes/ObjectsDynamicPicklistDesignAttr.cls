@@ -9,6 +9,13 @@ global class ObjectsDynamicPicklistDesignAttr extends VisualEditor.DynamicPickLi
         
         return null;
     }
+    
+    // Overloaded constructor for test usage
+    @testVisible
+    global ObjectsDynamicPicklistDesignAttr(String entityNameForTest) {
+        //this.testEntityName = entityNameForTest;
+    }
+    
     global override VisualEditor.DynamicPickListRows getValues() {
         String currentPageObjectName = context.entityName;
         VisualEditor.DynamicPickListRows  picklistValues = new VisualEditor.DynamicPickListRows();
